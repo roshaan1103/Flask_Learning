@@ -6,18 +6,11 @@ import mysql.connector
 
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = '192.168.18.246'
-app.config['MYSQL_USER'] = 'roshaan'
-app.config['MYSQL_PASSWORD'] = '1234'
-app.config['MYSQL_DB'] = 'alnafi'
+app.config['MYSQL_HOST'] = '#Mysql ipaddress'
+app.config['MYSQL_USER'] = '#mysql user'
+app.config['MYSQL_PASSWORD'] = '#Mysql user's password'
+app.config['MYSQL_DB'] = '#database name '
 mysql= MySQL(app)
-
-#db_config = {
-   # 'host': '192.168.18.246',     # e.g., '192.168.1.100'
-    #'user': 'roshaan',   # e.g., 'root'
-    #'password': '1234',
-    #'database': 'alnafi'
-#}
 
 mydata = "HOME PAGE"
 mycontact = "Contact Us"
