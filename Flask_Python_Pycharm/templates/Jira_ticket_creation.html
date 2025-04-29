@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a ticket</title>
+    <h1>Create a Ticket</h1>
+
+</head>
+<body>
+<table id="Jira Table" border="2">
+<form method="post" action="{{ url_for('Jira_ticket_creation') }}" name="Jira_ticket" >
+    <p><span>Project</span>
+        <select name="project" class="form-control" id="project" required>
+            <option value="IIP">IT-Infra-Project (IIP)</option>
+            <option value="AC">AlnafiLearning</option>
+        </select></p>
+
+    <p><span>Issue</span>
+        <select name="issuetype" class="form-control" id="issuetype" required>
+            <option value="Issue">Issue</option>
+            <option value="Request">Request</option>
+            <option value="Story">Story</option>
+            <option value="Task">Task</option>
+            <option value="Bug">Bug</option>
+        </select></p>
+
+    <p><span>Reporter</span>
+        <select name="reporter" class="form-control" id="reporter" required>
+            <option value="reporter id">Roshaan Ali Khan</option>
+        </select></p>
+
+    <p><span>Summary</span>
+        <input type="text" name="summary" required class="form-control" placeholder="Enter Summary">
+
+    <p><span>Description</span>
+        <input type="text" name="Description" required class="form-control" placeholder="Enter Description">
+
+    <p><span>Priority</span>
+        <select name="priority" class="form-control" id="priority" required>
+            <option value="Lowest">Lowest</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Highest">Highest</option>
+
+        </select></p>
+
+    <tr>
+        <td><input type="submit" value="Submit"></td>
+    </tr>
+
+
+</form>
+</table>
+</body>
+</html>

@@ -1,28 +1,16 @@
 from flask import Flask,render_template,request,url_for
 from flask_mysqldb import MySQL
 from datetime import *
-import mysql.connector
+from jira import JIRA
 
-
+api_key= "ATATT3xFfGF0qF5xwK7Xy6wFde9hxLBeLe2UvmBi5WsKFkJChKXrG7IAllqmY2poCOnGYKMtDDBPGC7LHONC94Ld_jSvpXXWWetAet5QVjiHJNLmSvv_6973zMKeyQQfR1Zz1gDoWtmMJzSEgrApup7zjtomlLcn7QUZM-1NXRsjz4WpeHAf_Lw=1CA963D4"
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = '#Mysql ipaddress'
-app.config['MYSQL_USER'] = '#mysql user'
-app.config['MYSQL_PASSWORD'] = '#Mysql user's password'
-app.config['MYSQL_DB'] = '#database name '
+app.config['MYSQL_HOST'] = '192.168.18.246'
+app.config['MYSQL_USER'] = 'roshaan'
+app.config['MYSQL_PASSWORD'] = '1234'
+app.config['MYSQL_DB'] = 'alnafi'
 mysql= MySQL(app)
-
-mydata = "HOME PAGE"
-mycontact = "Contact Us"
-
-
-@app.get("/")
-def get_Home():
-	return mydata
-
-@app.get("/contact")
-def get_contact():
-	return mycontact
 
 @app.get("/trainer")
 def trainer():
@@ -35,6 +23,11 @@ def trainer_create():
 		lname_data = request.form['lname']
 		design_data = request.form['design']
 		course_data = request.form['course']
+
+		if not fname_data or not lname_data or not design_data or not course_data:
+			error_message = "All fields are required!"
+			return render_template("trainer_details.html", error=error_message)
+
 		cdate= date.today()
 		sql = "INSERT INTO trainer_details (fname,lname,design,course,datetime) VALUES (%s,%s,%s,%s,%s)"
 		val= (fname_data,lname_data,design_data,course_data,cdate)
@@ -54,7 +47,77 @@ def trainer_create():
 		#close:
 		cursor.close()
 		#conn.close()
+
 		return render_template("trainer_details.html")
+
+@app.route("/trainerdata", methods=['POST', 'GET'])
+def trainer_data():
+	cursor = mysql.connection.cursor()
+	sql = "select * from trainer_details"
+	cursor.execute(sql)
+	row = cursor.fetchall()
+
+	return render_template("trainer_display.html", output_data=row)
+
+# @app.route("/ticket", methods=['POST', 'GET'])
+# def Jira_ticket_creation():
+#
+#
+# 	if request.method == "POST":
+# 		project_data = request.form['project']
+# 		issuetype_data=request.form['issuetype']
+# 		reporter_data = request.form['reporter']
+# 		summary_data = request.form['summary']
+# 		description_data = request.form['Description']
+# 		priority_data = request.form['priority']
+#
+# 		if not project_data or not issuetype_data or not reporter_data or not summary_data or not description_data or not priority_data:
+# 			error_message = "All fields are required!"
+#
+# 	server = 'https://roshaanjiralearn.atlassian.net'
+# 	user = "roshaanwork03@gmail.com"
+# 	jira =JIRA(server,basic_auth=(user,api_key))
+# 	issue= jira.create_issue(project_data='project',issuetype_data='issuetype',reporter_data='reporter',summary_data='summary',description_data='description',priority_data='priority')
+# 	print(issue)
+# 	return render_template("Jira_ticket_creation.html")
+@app.route("/ticket", methods=['POST', 'GET'])
+def Jira_ticket_creation():
+	if request.method == "POST":
+		project_data = request.form.get('project')
+		issuetype_data = request.form.get('issuetype')
+		reporter_data = request.form.get('reporter')  # Usually this is set via authentication, not manually
+		summary_data = request.form.get('summary')
+		description_data = request.form.get('Description')
+		priority_data = request.form.get('priority')
+
+		# Check required fields
+		if not all([project_data, issuetype_data, summary_data, description_data, priority_data]):
+			error_message = "All fields are required!"
+			return render_template("Jira_ticket_creation.html", error=error_message)
+
+		# Jira setup
+		server = 'https://roshaanjiralearn.atlassian.net'
+		user = "roshaanwork03@gmail.com"
+		jira = JIRA(server=server, basic_auth=(user, api_key))
+
+		issue_dict = {
+			'project': {'key': project_data},
+			'summary': summary_data,
+			'description': description_data,
+			'issuetype': {'name': issuetype_data},
+			'priority': {'name': priority_data},
+		}
+
+		try:
+			new_issue = jira.create_issue(fields=issue_dict)
+			success_message = f"Issue {new_issue.key} created successfully!"
+			return render_template("Jira_ticket_creation.html", success=success_message)
+		except Exception as e:
+			error_message = f"Failed to create issue: {str(e)}"
+			return render_template("Jira_ticket_creation.html", error=error_message)
+
+	# For GET requests
+	return render_template("Jira_ticket_creation.html")
 
 if __name__ == "__main__":
 	app.run(debug=True,host='0.0.0.0') #Debug=True to make sure you can edit while its running and host=0.0.0.0 means that any ip with same type can access it and port= can be used to set a desired port

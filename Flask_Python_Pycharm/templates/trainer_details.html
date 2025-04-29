@@ -1,28 +1,40 @@
 <html>
 <head>
     <h1>Trainer_details</h1>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    {% if success %}
+        <p style="color: green;">{{ success }}</p>
+    {% endif %}
 </head>
 <body>
 <table>
 <form method="post" action="{{ url_for('trainer_create') }}" name="trainer_form">
     <tr>
         <td>First Name</td>
-        <td><input type="text" name="fname"></td>
+        <td><input type="text" name="fname" required></td>
     </tr>
     <tr>
         <td>Last Name</td>
-        <td><input type="text" name="lname"></td>
+        <td><input type="text" name="lname" required></td>
     </tr>
     <tr>
         <td>Designation</td>
-        <td><input type="text" name="design"></td>
+        <td><input type="text" name="design" required></td>
     </tr>
     <tr>
         <td>Course</td>
-        <td><input type="text" name="course"></td>
+        <td><input type="text" name="course" required></td>
     </tr>
     <tr>
         <td><input type="submit" value="Submit"></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="Display Trainers" onclick="window.location.href='{{ url_for('trainer_data') }}'"></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="Create Ticket" onclick="window.location.href='{{ url_for('Jira_ticket_creation') }}'"> </td>
     </tr>
 </form>
 </table>
