@@ -3,7 +3,7 @@ from flask_mysqldb import MySQL
 from datetime import *
 from jira import JIRA
 
-api_key= "ATATT3xFfGF0qF5xwK7Xy6wFde9hxLBeLe2UvmBi5WsKFkJChKXrG7IAllqmY2poCOnGYKMtDDBPGC7LHONC94Ld_jSvpXXWWetAet5QVjiHJNLmSvv_6973zMKeyQQfR1Zz1gDoWtmMJzSEgrApup7zjtomlLcn7QUZM-1NXRsjz4WpeHAf_Lw=1CA963D4"
+api_key= "#Your Jira API key"
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = '192.168.18.246'
